@@ -1,0 +1,216 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Hub Inteligente de Recursos Educacionais",
+        "description": "API para gerenciamento de materiais didáticos com Smart Assist via IA",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/resources": {
+            "get": {
+                "tags": [
+                    "Resources"
+                ],
+                "summary": "Listar todos os recursos educacionais",
+                "operationId": "b68ca62605727ce3ea6d4551e462e567",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Itens por página",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista paginada de recursos"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Resources"
+                ],
+                "summary": "Criar novo recurso educacional",
+                "operationId": "35423e34cd5fd4cdcd4ec832e2986fa1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "type",
+                                    "url"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Introdução à Álgebra Linear"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Aula sobre vetores e matrizes"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "video",
+                                            "pdf",
+                                            "link"
+                                        ]
+                                    },
+                                    "url": {
+                                        "type": "string",
+                                        "example": "https://youtube.com/exemplo"
+                                    },
+                                    "tags": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Recurso criado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
+        "/resources/{id}": {
+            "get": {
+                "tags": [
+                    "Resources"
+                ],
+                "summary": "Buscar recurso por ID",
+                "operationId": "a710c52b41b8fadd0297f8e6b3d7ef5a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Recurso encontrado"
+                    },
+                    "404": {
+                        "description": "Recurso não encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Resources"
+                ],
+                "summary": "Atualizar recurso educacional",
+                "operationId": "c20e8736e630a63703369926f0b02866",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "video",
+                                            "pdf",
+                                            "link"
+                                        ]
+                                    },
+                                    "url": {
+                                        "type": "string"
+                                    },
+                                    "tags": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Recurso atualizado"
+                    },
+                    "404": {
+                        "description": "Recurso não encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Resources"
+                ],
+                "summary": "Remover recurso educacional",
+                "operationId": "d3169e3c0fab73499b5dcf41024e22bc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Recurso removido"
+                    },
+                    "404": {
+                        "description": "Recurso não encontrado"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Resources",
+            "description": "Resources"
+        }
+    ]
+}
