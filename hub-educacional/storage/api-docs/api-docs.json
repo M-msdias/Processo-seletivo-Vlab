@@ -205,12 +205,64 @@
                     }
                 }
             }
+        },
+        "/resources/smart-assist": {
+            "post": {
+                "tags": [
+                    "Smart Assist"
+                ],
+                "summary": "Gerar descrição e tags com IA",
+                "operationId": "b4be3137fc17e088fb9d85df1201241c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "type"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Introdução à Álgebra Linear"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "video",
+                                            "pdf",
+                                            "link"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Descrição e tags geradas com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    },
+                    "503": {
+                        "description": "Serviço de IA indisponível"
+                    }
+                }
+            }
         }
     },
     "tags": [
         {
             "name": "Resources",
             "description": "Resources"
+        },
+        {
+            "name": "Smart Assist",
+            "description": "Smart Assist"
         }
     ]
 }

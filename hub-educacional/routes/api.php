@@ -3,6 +3,9 @@
 use App\Http\Controllers\ResourceController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SmartAssistController;
+
+Route::post('resources/smart-assist', [SmartAssistController::class, 'generate']);
 
 Route::apiResource('resources', ResourceController::class);
 
