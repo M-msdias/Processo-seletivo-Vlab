@@ -1,0 +1,10 @@
+ <div class="search-wrapper">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        [ngModel]="value()"
+        (ngModelChange)="search.emit($event)"
+        placeholder="Buscar recursos ou tags..."
+        class="search-input"
+      />
+</div>

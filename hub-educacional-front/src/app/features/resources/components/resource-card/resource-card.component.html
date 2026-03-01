@@ -1,0 +1,30 @@
+<div class="resource-card">
+
+      <div class="card-header">
+        <div class="card-icon" [ngClass]="'icon-' + resource().type">
+          {{ typeIcon() }}
+        </div>
+        <span class="badge" [ngClass]="'badge-' + resource().type">
+          {{ resource().type.toUpperCase() }}
+        </span>
+      </div>
+
+      <h3 class="card-title">{{ resource().title }}</h3>
+      <p class="card-description">{{ resource().description }}</p>
+
+      <div class="card-tags">
+        <span class="tag" *ngFor="let tag of resource().tags">
+          {{ tag }}
+        </span>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn-icon" (click)="edit.emit(resource())" title="Editar">
+          ✏️
+        </button>
+        <button class="btn-icon btn-danger" (click)="delete.emit(resource().id)" title="Excluir">
+          🗑️
+        </button>
+      </div>
+
+</div>
