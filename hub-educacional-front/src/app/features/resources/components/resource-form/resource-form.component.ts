@@ -14,10 +14,12 @@ export class ResourceFormComponent implements OnInit {
   readonly mode = input<'create' | 'edit'>('create');
   readonly resource = input<Resource | null>(null);
   readonly aiLoading = input<boolean>(false);
+  readonly formLoading = input<boolean>(false);
+  readonly aiResult = input<{ description: string; tags: string[] } | null>(null);
 
   readonly submit = output<CreateResourceDto>();
   readonly cancel = output<void>();
-  readonly requestAi = output<{ title: string; url: string }>();
+  readonly requestAi = output<{ title: string; type: string }>();
 
   form!: FormGroup;
   tags: string[] = [];
@@ -28,11 +30,13 @@ export class ResourceFormComponent implements OnInit {
     { value: 'link' as ResourceType, label: 'Link', icon: '🔗' },
   ];
 
+  private _initialized = false;
+
+
   constructor(private fb: FormBuilder) {
-    // Atualiza o form quando o recurso selecionado mudar (ex: IA preencheu descrição)
     effect(() => {
       const r = this.resource();
-      if (r && this.form) {
+      if (r && this.form && !this._initialized) {
         this.form.patchValue({
           title: r.title,
           type: r.type,
@@ -40,6 +44,16 @@ export class ResourceFormComponent implements OnInit {
           description: r.description,
         });
         this.tags = [...r.tags];
+        this._initialized = true;
+      }
+    });
+
+
+    effect(() => {
+      const result = this.aiResult();
+      if (result && this.form) {
+        this.form.patchValue({ description: result.description });
+        this.tags = [...result.tags];
       }
     });
   }
@@ -67,11 +81,12 @@ export class ResourceFormComponent implements OnInit {
   onGenerateAi(): void {
     this.requestAi.emit({
       title: this.form.value.title,
-      url: this.form.value.url,
+      type: this.form.value.type,
     });
   }
 
   onSubmit(): void {
+     console.trace('🟡 onSubmit chamado');
     if (this.form.valid) {
       this.submit.emit({ ...this.form.value, tags: this.tags });
     }

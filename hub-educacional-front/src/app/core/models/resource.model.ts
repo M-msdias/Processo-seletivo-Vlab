@@ -31,7 +31,7 @@ export type UpdateResourceDto = Partial<CreateResourceDto>;
 
 export interface SmartAssistRequest {
   title: string;
-  url?: string;
+  type?: string;
 }
 
 export interface SmartAssistResponse {

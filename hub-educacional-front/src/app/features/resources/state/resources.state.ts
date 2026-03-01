@@ -10,6 +10,8 @@ export interface ResourcesStateModel {
   formVisible: boolean;
   formMode: 'create' | 'edit';
   aiLoading: boolean;
+  aiResult: { description: string; tags: string[] } | null;
+  mutating: boolean;
 }
 
 const initialState: ResourcesStateModel = {
@@ -21,6 +23,8 @@ const initialState: ResourcesStateModel = {
   formVisible: false,
   formMode: 'create',
   aiLoading: false,
+  aiResult: null,
+  mutating: false
 };
 
 @Injectable()

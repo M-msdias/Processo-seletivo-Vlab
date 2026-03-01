@@ -7,15 +7,16 @@ import {
   CreateResourceDto,
   UpdateResourceDto
 } from '../models/resource.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ResourcesApiService {
-  private readonly baseUrl = 'http://localhost:8000/api/recursos';
+  private readonly baseUrl = `${environment.apiUrl}/resources`;
 
   constructor(private http: HttpClient) {}
 
   getAll(perPage = 15): Observable<PaginatedResponse<Resource>> {
-    const params = new HttpParams().set('por_pagina', perPage);
+    const params = new HttpParams().set('per_page', perPage);
     return this.http.get<PaginatedResponse<Resource>>(this.baseUrl, { params });
   }
 

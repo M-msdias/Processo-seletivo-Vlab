@@ -13,9 +13,11 @@
       <p class="card-description">{{ resource().description }}</p>
 
       <div class="card-tags">
-        <span class="tag" *ngFor="let tag of resource().tags">
-          {{ tag }}
-        </span>
+        @for (tag of resource().tags; track $index) {
+          <span class="tag">
+            {{ tag }}
+          </span>
+        }
       </div>
 
       <div class="card-actions">

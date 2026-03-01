@@ -25,7 +25,7 @@
 
       @if (facade.loading()) {
         <div class="loading">
-            <span>Carregando...</span>
+            <div class="lds-heart"><div></div></div>
         </div>
       }
       
@@ -62,13 +62,13 @@
         [mode]="facade.formMode()"
         [resource]="facade.selectedResource()"
         [aiLoading]="facade.aiLoading()"
+        [aiResult]="facade.aiResult()"
+        [formLoading]="facade.mutating()"
         (submit)="onFormSubmit($event)"
         (cancel)="facade.closeForm()"
-        (requestAi)="facade.generateAiDescription($event.title, $event.url)">
+        (requestAi)="facade.generateAiDescription($event.title, $event.type)">
         </app-resource-form>
     }
+
     
-    <footer class="hub-footer">
-      
-    </footer>
     <app-footer></app-footer>

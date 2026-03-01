@@ -8,6 +8,8 @@ import {
   UpdateResourceDto
 } from '../../../core/models/resource.model';
 
+
+
 @Injectable()
 export class ResourcesFacade {
 
@@ -19,8 +21,13 @@ export class ResourcesFacade {
   readonly formMode = computed(() => this.state.state().formMode);
   readonly selectedResource = computed(() => this.state.state().selectedResource);
   readonly searchQuery = computed(() => this.state.state().searchQuery);
+  readonly aiResult = computed(() => this.state.state().aiResult);
+
+  readonly mutating = computed(() => this.state.state().mutating);
 
   readonly totalCount = computed(() => this.state.state().resources.length);
+
+  private _loadingInProgress = false;
 
   readonly filteredResources = computed(() => {
     const query = this.state.state().searchQuery.toLowerCase().trim();
@@ -39,6 +46,7 @@ export class ResourcesFacade {
   ) {}
 
   loadResources(): void {
+    console.trace('🔴 loadResources chamado');
     this.state.patch({ loading: true, error: null });
     this.resourcesApi.getAll().subscribe({
       next: ({ data }) => this.state.patch({ resources: data, loading: false }),
@@ -47,55 +55,51 @@ export class ResourcesFacade {
   }
 
   createResource(dto: CreateResourceDto): void {
-    this.state.patch({ loading: true });
+    this.state.patch({ mutating: true });
     this.resourcesApi.create(dto).subscribe({
       next: resource => {
         const resources = [resource, ...this.state.state().resources];
-        this.state.patch({ resources, loading: false, formVisible: false });
+        this.state.patch({ resources, mutating: false, formVisible: false });
       },
-      error: err => this.state.patch({ loading: false, error: err.message }),
+      error: err => this.state.patch({ mutating: false, error: err.message }),
     });
   }
 
   updateResource(id: number, dto: UpdateResourceDto): void {
-    this.state.patch({ loading: true });
+    this.state.patch({ mutating: true });
     this.resourcesApi.update(id, dto).subscribe({
       next: updated => {
         const resources = this.state.state().resources
           .map(r => r.id === id ? updated : r);
         this.state.patch({
           resources,
-          loading: false,
           formVisible: false,
+          mutating: false,
           selectedResource: null
         });
       },
-      error: err => this.state.patch({ loading: false, error: err.message }),
+      error: err => this.state.patch({ mutating: false, error: err.message }),
     });
   }
 
   deleteResource(id: number): void {
+    this.state.patch({ mutating: true });
     this.resourcesApi.delete(id).subscribe({
       next: () => {
         const resources = this.state.state().resources.filter(r => r.id !== id);
-        this.state.patch({ resources });
+        this.state.patch({ resources, mutating: false });
       },
-      error: err => this.state.patch({ error: err.message }),
+      error: err => this.state.patch({ error: err.message, mutating: false }),
     });
   }
 
-  generateAiDescription(title: string, url?: string): void {
+  generateAiDescription(title: string, type?: string): void {
     this.state.patch({ aiLoading: true });
-    this.smartAssistApi.generate({ title, url }).subscribe({
+    this.smartAssistApi.generate({ title, type }).subscribe({
       next: result => {
-        const current = this.state.state().selectedResource;
         this.state.patch({
           aiLoading: false,
-          selectedResource: {
-            ...current!,
-            description: result.description,
-            tags: result.tags,
-          }
+          aiResult: result  
         });
       },
       error: () => this.state.patch({ aiLoading: false }),

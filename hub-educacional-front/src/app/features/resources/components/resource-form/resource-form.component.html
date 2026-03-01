@@ -5,33 +5,32 @@
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-          <!-- Título -->
           <div class="form-group">
             <label>TÍTULO</label>
             <input formControlName="title" placeholder="Ex: Introdução ao React" />
           </div>
 
-          <!-- Tipo -->
           <div class="form-group">
             <label>TIPO</label>
             <div class="type-selector">
-              <button
-                type="button"
-                *ngFor="let t of types"
-                [class.active]="form.value.type === t.value"
-                (click)="form.patchValue({ type: t.value })">
-                {{ t.icon }} {{ t.label }}
-              </button>
+                @for (t of types; track $index) {
+                    <button
+                        type="button"
+                        [class.active]="form.value.type === t.value"
+                        (click)="form.patchValue({ type: t.value })">
+                        {{ t.icon }} {{ t.label }}
+                    </button>
+                }
+              
             </div>
           </div>
 
-          <!-- URL -->
+   
           <div class="form-group">
             <label>URL</label>
             <input formControlName="url" placeholder="https://..." />
           </div>
 
-          <!-- Descrição -->
           <div class="form-group">
             <label>DESCRIÇÃO</label>
             <textarea
@@ -47,7 +46,6 @@
             </button>
           </div>
 
-          <!-- Tags -->
           <div class="form-group">
             <label>TAGS</label>
             <div class="tags-input">
@@ -63,10 +61,13 @@
             </div>
           </div>
 
-          <!-- Ações -->
           <div class="form-actions">
-            <button type="submit" class="btn-primary" [disabled]="form.invalid">
-              {{ mode() === 'create' ? 'Adicionar Recurso 💖' : 'Salvar Alterações 💖' }}
+            <button type="submit" class="btn-primary" [disabled]="form.invalid || formLoading()">
+              @if (formLoading()) {
+                ⏳ Salvando...
+              } @else {
+                {{ mode() === 'create' ? 'Adicionar Recurso 💖' : 'Salvar Alterações 💖' }}
+              }
             </button>
             <button type="button" class="btn-secondary" (click)="cancel.emit()">
               Cancelar

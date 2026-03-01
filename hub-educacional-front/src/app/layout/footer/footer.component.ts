@@ -17,5 +17,5 @@ export class FooterComponent {
     { label: 'Contato', href: '#' }
   ];
 
-  tags = ['Acessibilidade', 'Design', 'SCSS', 'Estilização', 'Educação', 'AI'];
+  tags = ['Acessibilidade', 'Design', 'Estilização', 'Educação', 'AI'];
 }

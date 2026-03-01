@@ -5,15 +5,16 @@ import {
   SmartAssistRequest,
   SmartAssistResponse
 } from '../models/resource.model';
+import { environment } from '../../../environments/environment';
+
 
 @Injectable({ providedIn: 'root' })
 export class SmartAssistApiService {
-  private readonly url =
-    'http://localhost:8000/api/recursos/assistencia-inteligente';
+  private readonly baseUrl = `${environment.apiUrl}/resources/smart-assist`;
 
   constructor(private http: HttpClient) {}
 
   generate(request: SmartAssistRequest): Observable<SmartAssistResponse> {
-    return this.http.post<SmartAssistResponse>(this.url, request);
+    return this.http.post<SmartAssistResponse>(this.baseUrl, request);
   }
 }
