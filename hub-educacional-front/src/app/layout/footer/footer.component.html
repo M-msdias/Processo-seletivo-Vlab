@@ -1,0 +1,39 @@
+<footer class="footer">
+
+  <div class="footer__container">
+    <div class="footer__brand">
+      <div class="footer__icon">📖</div>
+      <h2 class="footer__title">
+        Hub <span class="footer__title--highlight">Inteligente</span>
+      </h2>
+      <p class="footer__tagline">✦ Recursos Educacionais ✦</p>
+    </div>
+
+    <nav class="footer__nav">
+        @for (link of navLinks; track $index) {
+            <a
+                [href]="link.href"
+                class="footer__nav-link"
+            >
+                {{ link.label }}
+            </a>
+        }
+    </nav>
+
+    <div class="footer__tags">
+        @for (tag of tags; track $index) {
+             <span class="footer__tag">
+                {{ tag }}
+            </span>
+        }
+     
+    </div>
+
+    <hr class="footer__divider" />
+
+    <div class="footer__bottom">
+      <p>© {{ currentYear }} Hub Inteligente. Todos os direitos reservados.</p>
+      <p>Feito com <span class="footer__heart">♥</span> para educadores</p>
+    </div>
+  </div>
+</footer>

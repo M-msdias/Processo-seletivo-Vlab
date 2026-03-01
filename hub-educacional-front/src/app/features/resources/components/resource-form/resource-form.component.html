@@ -1,1 +1,79 @@
-<p>resource-form works!</p>
+ <div class="modal-overlay" (click)="cancel.emit()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+
+        <h2>{{ mode() === 'create' ? 'Novo Recurso 🌸' : 'Editar Recurso ✏️' }}</h2>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+          <!-- Título -->
+          <div class="form-group">
+            <label>TÍTULO</label>
+            <input formControlName="title" placeholder="Ex: Introdução ao React" />
+          </div>
+
+          <!-- Tipo -->
+          <div class="form-group">
+            <label>TIPO</label>
+            <div class="type-selector">
+              <button
+                type="button"
+                *ngFor="let t of types"
+                [class.active]="form.value.type === t.value"
+                (click)="form.patchValue({ type: t.value })">
+                {{ t.icon }} {{ t.label }}
+              </button>
+            </div>
+          </div>
+
+          <!-- URL -->
+          <div class="form-group">
+            <label>URL</label>
+            <input formControlName="url" placeholder="https://..." />
+          </div>
+
+          <!-- Descrição -->
+          <div class="form-group">
+            <label>DESCRIÇÃO</label>
+            <textarea
+              formControlName="description"
+              placeholder="Descreva o recurso...">
+            </textarea>
+            <button
+              type="button"
+              class="btn-ai"
+              (click)="onGenerateAi()"
+              [disabled]="aiLoading()">
+              {{ aiLoading() ? '⏳ Gerando...' : 'Gerar Descrição com IA ✨' }}
+            </button>
+          </div>
+
+          <!-- Tags -->
+          <div class="form-group">
+            <label>TAGS</label>
+            <div class="tags-input">
+              <span class="tag" *ngFor="let tag of tags">
+                {{ tag }}
+                <button type="button" (click)="removeTag(tag)">×</button>
+              </span>
+              <input
+                #tagInput
+                placeholder="Adicionar tag..."
+                (keydown.enter)="addTag(tagInput.value); tagInput.value = ''; $event.preventDefault()"
+              />
+            </div>
+          </div>
+
+          <!-- Ações -->
+          <div class="form-actions">
+            <button type="submit" class="btn-primary" [disabled]="form.invalid">
+              {{ mode() === 'create' ? 'Adicionar Recurso 💖' : 'Salvar Alterações 💖' }}
+            </button>
+            <button type="button" class="btn-secondary" (click)="cancel.emit()">
+              Cancelar
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  `,

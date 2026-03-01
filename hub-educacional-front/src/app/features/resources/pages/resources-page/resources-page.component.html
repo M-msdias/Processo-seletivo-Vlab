@@ -1,0 +1,74 @@
+
+    <header class="hub-header">
+      <div class="hub-logo">📖</div>
+      <h1>Hub <em>Inteligente</em></h1>
+      <p>• Recursos Educacionais •</p>
+    </header>
+
+    
+    <section class="search-section">
+      <app-search-bar
+        [value]="facade.searchQuery()"
+        (search)="facade.setSearchQuery($event)">
+      </app-search-bar>
+      <button class="btn-primary" (click)="facade.openCreateForm()">
+        + Novo Recurso
+      </button>
+    </section>
+
+    <main class="resources-main">
+
+      <div class="section-header">
+        <h2>Meus <em>Recursos</em></h2>
+        <span class="badge-count">{{ facade.totalCount() }} itens</span>
+      </div>
+
+      @if (facade.loading()) {
+        <div class="loading">
+            <span>Carregando...</span>
+        </div>
+      }
+      
+
+      @if (facade.error()) {
+        <div class="error-message">
+            ⚠️ {{ facade.error() }}
+        </div>
+      }
+      
+
+      @if (!facade.loading()) {
+        <div class="resources-grid">
+            <app-resource-card
+            *ngFor="let resource of facade.filteredResources()"
+            [resource]="resource"
+            (edit)="facade.openEditForm($event)"
+            (delete)="facade.deleteResource($event)">
+            </app-resource-card>
+        </div>
+      }
+      
+
+       @if (!facade.loading() && facade.filteredResources().length === 0) {
+            <div class="empty-state">
+                <p>Nenhum recurso encontrado 🔍</p>
+            </div>
+       }
+
+    </main>
+
+    @if (facade.formVisible()) {
+        <app-resource-form
+        [mode]="facade.formMode()"
+        [resource]="facade.selectedResource()"
+        [aiLoading]="facade.aiLoading()"
+        (submit)="onFormSubmit($event)"
+        (cancel)="facade.closeForm()"
+        (requestAi)="facade.generateAiDescription($event.title, $event.url)">
+        </app-resource-form>
+    }
+    
+    <footer class="hub-footer">
+      
+    </footer>
+    <app-footer></app-footer>
