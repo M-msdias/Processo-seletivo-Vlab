@@ -64,7 +64,7 @@
         [aiLoading]="facade.aiLoading()"
         [aiResult]="facade.aiResult()"
         [formLoading]="facade.mutating()"
-        (submit)="onFormSubmit($event)"
+        (save)="onFormSubmit($event)"
         (cancel)="facade.closeForm()"
         (requestAi)="facade.generateAiDescription($event.title, $event.type)">
         </app-resource-form>

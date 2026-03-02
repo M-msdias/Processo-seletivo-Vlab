@@ -4,9 +4,10 @@
         <div class="card-icon" [ngClass]="'icon-' + resource().type">
           {{ typeIcon() }}
         </div>
-        <span class="badge" [ngClass]="'badge-' + resource().type">
-          {{ resource().type.toUpperCase() }}
+        <span class="badge" [ngClass]="'badge-' + (resource().type || 'default')">
+          {{ resource().type | uppercase }}
         </span>
+
       </div>
 
       <h3 class="card-title">{{ resource().title }}</h3>

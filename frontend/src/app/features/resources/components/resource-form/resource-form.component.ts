@@ -17,7 +17,9 @@ export class ResourceFormComponent implements OnInit {
   readonly formLoading = input<boolean>(false);
   readonly aiResult = input<{ description: string; tags: string[] } | null>(null);
 
-  readonly submit = output<CreateResourceDto>();
+  readonly save = output<CreateResourceDto>();
+
+  // readonly submit = output<CreateResourceDto>();
   readonly cancel = output<void>();
   readonly requestAi = output<{ title: string; type: string }>();
 
@@ -86,9 +88,8 @@ export class ResourceFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-     console.trace('🟡 onSubmit chamado');
     if (this.form.valid) {
-      this.submit.emit({ ...this.form.value, tags: this.tags });
+      this.save.emit({ ...this.form.value, tags: this.tags });
     }
   }
 }

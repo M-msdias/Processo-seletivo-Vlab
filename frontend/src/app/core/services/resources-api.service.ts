@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   Resource,
   PaginatedResponse,
@@ -25,11 +25,11 @@ export class ResourcesApiService {
   }
 
   create(dto: CreateResourceDto): Observable<Resource> {
-    return this.http.post<Resource>(this.baseUrl, dto);
+    return this.http.post<{ data: Resource }>(this.baseUrl, dto).pipe(map(response => response.data));
   }
 
   update(id: number, dto: UpdateResourceDto): Observable<Resource> {
-    return this.http.put<Resource>(`${this.baseUrl}/${id}`, dto);
+    return this.http.put<{ data: Resource }>(`${this.baseUrl}/${id}`, dto).pipe(map(response => response.data));
   }
 
   delete(id: number): Observable<void> {

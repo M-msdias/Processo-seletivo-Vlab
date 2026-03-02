@@ -1,11 +1,11 @@
 import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, UpperCasePipe } from '@angular/common';
 import { Resource } from '../../../../core/models/resource.model';
 
 
 @Component({
   selector: 'app-resource-card',
-  imports: [CommonModule],
+  imports: [CommonModule, UpperCasePipe],
   templateUrl: './resource-card.component.html',
   styleUrl: './resource-card.component.scss',
 })

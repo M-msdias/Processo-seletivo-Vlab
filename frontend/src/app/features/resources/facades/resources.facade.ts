@@ -46,7 +46,6 @@ export class ResourcesFacade {
   ) {}
 
   loadResources(): void {
-    console.trace('🔴 loadResources chamado');
     this.state.patch({ loading: true, error: null });
     this.resourcesApi.getAll().subscribe({
       next: ({ data }) => this.state.patch({ resources: data, loading: false }),
