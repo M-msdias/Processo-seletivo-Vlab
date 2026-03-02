@@ -13,11 +13,28 @@ export interface Resource {
 
 export interface PaginatedResponse<T> {
   data: T[];
-  total: number;
-  per_page: number;
-  current_page: number;
-  last_page: number;
+  links: {
+    first: string;
+    last: string;
+    prev: string | null;
+    next: string | null;
+  };
+  meta: {
+    current_page: number;
+    from: number;
+    last_page: number;
+    path: string;
+    per_page: number;
+    to: number;
+    total: number;
+    links: {
+      url: string | null;
+      label: string;
+      active: boolean;
+    }[];
+  };
 }
+
 
 export interface CreateResourceDto {
   title: string;

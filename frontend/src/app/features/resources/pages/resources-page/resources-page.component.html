@@ -39,12 +39,13 @@
 
       @if (!facade.loading()) {
         <div class="resources-grid">
-            <app-resource-card
-            *ngFor="let resource of facade.filteredResources()"
-            [resource]="resource"
-            (edit)="facade.openEditForm($event)"
-            (delete)="facade.deleteResource($event)">
-            </app-resource-card>
+            @for (resource of facade.filteredResources(); track $index) {
+              <app-resource-card
+                [resource]="resource"
+                (edit)="facade.openEditForm($event)"
+                (delete)="facade.deleteResource($event)">
+                </app-resource-card>
+            }
         </div>
       }
       
@@ -68,6 +69,18 @@
         (cancel)="facade.closeForm()"
         (requestAi)="facade.generateAiDescription($event.title, $event.type)">
         </app-resource-form>
+    }
+
+    @if (facade.totalRecords() > 0) {
+      <div class="paginator-wrapper">
+        <p-paginator 
+          (onPageChange)="facade.changePage($event)" 
+          [first]="(facade.currentPage() - 1) * facade.perPage()" 
+          [rows]="facade.perPage()" 
+          [totalRecords]="facade.totalRecords()" 
+          [rowsPerPageOptions]="[15, 30, 50]">
+        </p-paginator>
+      </div>
     }
 
     

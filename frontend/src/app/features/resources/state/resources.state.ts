@@ -12,6 +12,10 @@ export interface ResourcesStateModel {
   aiLoading: boolean;
   aiResult: { description: string; tags: string[] } | null;
   mutating: boolean;
+
+  totalRecords: number;
+  currentPage: number;
+  perPage: number;
 }
 
 const initialState: ResourcesStateModel = {
@@ -24,7 +28,11 @@ const initialState: ResourcesStateModel = {
   formMode: 'create',
   aiLoading: false,
   aiResult: null,
-  mutating: false
+  mutating: false,
+
+  totalRecords: 0,
+  currentPage: 1,
+  perPage: 15,
 };
 
 @Injectable()

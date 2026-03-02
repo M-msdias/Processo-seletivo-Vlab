@@ -27,7 +27,9 @@ export class ResourcesFacade {
 
   readonly totalCount = computed(() => this.state.state().resources.length);
 
-  private _loadingInProgress = false;
+  readonly totalRecords = computed(() => this.state.state().totalRecords);
+  readonly currentPage = computed(() => this.state.state().currentPage);
+  readonly perPage = computed(() => this.state.state().perPage);
 
   readonly filteredResources = computed(() => {
     const query = this.state.state().searchQuery.toLowerCase().trim();
@@ -45,12 +47,34 @@ export class ResourcesFacade {
     private smartAssistApi: SmartAssistApiService
   ) {}
 
-  loadResources(): void {
+  loadResources(page?: number): void {
+    const targetPage = page || this.state.state().currentPage;
+    const perPage = this.state.state().perPage;
+
     this.state.patch({ loading: true, error: null });
-    this.resourcesApi.getAll().subscribe({
-      next: ({ data }) => this.state.patch({ resources: data, loading: false }),
-      error: err => this.state.patch({ loading: false, error: err.message }),
+    
+    this.resourcesApi.getAll(targetPage, perPage).subscribe({
+      next: (response) => {
+        this.state.patch({ 
+          resources: response.data, 
+          totalRecords: response.meta.total,       
+          currentPage: response.meta.current_page,  
+          perPage: response.meta.per_page,          
+          loading: false,
+        });
+      },
+      error: err => {
+        this.state.patch({ loading: false, error: err.message });
+      },
     });
+  }
+
+  changePage(event: any): void {
+    const newPage = event.page + 1; 
+    const rows = event.rows;
+    
+    this.state.patch({ perPage: rows, currentPage: newPage });
+    this.loadResources(newPage);
   }
 
   createResource(dto: CreateResourceDto): void {

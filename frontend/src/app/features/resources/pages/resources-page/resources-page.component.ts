@@ -8,6 +8,7 @@ import { ResourceFormComponent } from '../../components/resource-form/resource-f
 import { CreateResourceDto } from '../../../../core/models/resource.model';
 import { FooterComponent } from '../../../../layout/footer/footer.component';
 import { ResourcesState } from '../../state/resources.state';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-resources-page',
@@ -16,7 +17,8 @@ import { ResourcesState } from '../../state/resources.state';
     SearchBarComponent,
     ResourceCardComponent,
     ResourceFormComponent,
-    FooterComponent
+    FooterComponent,
+    PaginatorModule
   ],
   providers: [ResourcesState, ResourcesFacade],
   templateUrl: './resources-page.component.html',

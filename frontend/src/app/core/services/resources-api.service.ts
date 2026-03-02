@@ -15,8 +15,11 @@ export class ResourcesApiService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(perPage = 15): Observable<PaginatedResponse<Resource>> {
-    const params = new HttpParams().set('per_page', perPage);
+  getAll(page: number = 1, perPage: number = 15): Observable<PaginatedResponse<Resource>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('por_pagina', perPage.toString());
+      
     return this.http.get<PaginatedResponse<Resource>>(this.baseUrl, { params });
   }
 
