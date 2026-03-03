@@ -1,4 +1,3 @@
-# Use --platform para garantir compatibilidade com Render (amd64)
 FROM --platform=linux/amd64 php:8.4-fpm-alpine
 
 RUN apk add --no-cache \
@@ -24,12 +23,24 @@ WORKDIR /var/www/html
 COPY composer.json composer.lock ./
 
 RUN composer config --global process-timeout 600 \
-    && composer install --no-dev --optimize-autoloader --no-scripts --no-interaction --prefer-dist \
-    || (composer update --lock --no-interaction && composer install --no-dev --optimize-autoloader --no-scripts --no-interaction)
+    && composer install \
+        --no-dev \
+        --optimize-autoloader \
+        --no-scripts \
+        --no-interaction \
+        --prefer-dist \
+    || (composer update --lock --no-interaction \
+        && composer install \
+            --no-dev \
+            --optimize-autoloader \
+            --no-scripts \
+            --no-interaction \
+            --prefer-dist)
 
 COPY . .
 
-RUN chown -R www-data:www-data storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
@@ -38,4 +49,4 @@ EXPOSE 9000
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=9000"]
+CMD ["php-fpm"]
