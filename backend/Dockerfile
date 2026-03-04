@@ -21,7 +21,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-COPY composer.json composer.lock ./
+COPY . .
 
 RUN composer install \
     --no-dev \
@@ -29,7 +29,7 @@ RUN composer install \
     --no-interaction \
     --prefer-dist
 
-COPY . .
+
 
 RUN php artisan l5-swagger:generate
 
