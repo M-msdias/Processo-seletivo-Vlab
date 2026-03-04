@@ -23,22 +23,15 @@ WORKDIR /var/www/html
 
 COPY composer.json composer.lock ./
 
-RUN composer config --global process-timeout 600 \
-    && composer install \
-        --no-dev \
-        --optimize-autoloader \
-        --no-scripts \
-        --no-interaction \
-        --prefer-dist \
-    || (composer update --lock --no-interaction \
-        && composer install \
-            --no-dev \
-            --optimize-autoloader \
-            --no-scripts \
-            --no-interaction \
-            --prefer-dist)
+RUN composer install \
+    --no-dev \
+    --optimize-autoloader \
+    --no-interaction \
+    --prefer-dist
 
 COPY . .
+
+RUN php artisan l5-swagger:generate
 
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
