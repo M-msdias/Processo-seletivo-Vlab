@@ -50,8 +50,7 @@ RUN mkdir -p /var/log/nginx \
     && ln -sf /dev/stderr /var/log/nginx/error.log \
     && ln -sf /dev/stdout /var/log/nginx/access.log
 
-EXPOSE 9000
+EXPOSE 80
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-
-CMD ["php-fpm"]
+CMD sh -c "php-fpm & nginx -g 'daemon off;'"
