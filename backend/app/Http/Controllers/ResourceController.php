@@ -32,21 +32,27 @@ class ResourceController extends Controller
      *     tags={"Resources"},
      *     summary="Listar todos os recursos educacionais",
      *     @OA\Parameter(
-     *         name="per_page",
+     *         name="pageSize",
      *         in="query",
      *         description="Itens por página",
      *         @OA\Schema(type="integer", default=15)
      *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Número da página (obrigatório a partir de agora)",
+     *         @OA\Schema(type="integer", minimum=1, default=1)
+     *     ),
      *     @OA\Response(response=200, description="Lista paginada de recursos")
      * )
-    */
+     */
     public function index(): AnonymousResourceCollection
     {
          try {
-            $perPage = request('per_page', 15);
+            $perPage = request('pageSize', 15);
             
             Log::info('Resource List Requested', [
-                'per_page' => $perPage,
+                'pageSize' => $perPage,
             ]);
 
             $resources = EducationalResource::with('tags')
@@ -55,7 +61,7 @@ class ResourceController extends Controller
 
             Log::info('Resource List Retrieved', [
                 'total' => $resources->total(),
-                'per_page' => $resources->perPage(),
+                'pageSize' => $resources->perPage(),
                 'current_page' => $resources->currentPage()
             ]);
 

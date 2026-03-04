@@ -18,7 +18,7 @@ export class ResourcesApiService {
   getAll(page: number = 1, perPage: number = 15): Observable<PaginatedResponse<Resource>> {
     let params = new HttpParams()
       .set('page', page.toString())
-      .set('por_pagina', perPage.toString());
+      .set('pageSize', perPage.toString());
       
     return this.http.get<PaginatedResponse<Resource>>(this.baseUrl, { params });
   }
