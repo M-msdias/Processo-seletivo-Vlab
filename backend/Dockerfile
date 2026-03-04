@@ -36,6 +36,9 @@ RUN php artisan l5-swagger:generate
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
+RUN chown -R www-data:www-data storage \
+    && chmod -R 775 storage
+
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
