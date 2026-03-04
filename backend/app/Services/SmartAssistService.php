@@ -26,7 +26,6 @@ class SmartAssistService
         try {
 
             Log::info('AI Request Started', [
-                'request_id' => $requestId,
                 'title' => $title,
                 'type' => $type->value,
                 'timestamp' => now()->toIso8601String()
@@ -50,7 +49,6 @@ class SmartAssistService
 
             if ($response->failed()) {
                 Log::error('AI Request Failed', [
-                    'request_id' => $requestId,
                     'title' => $title,
                     'type' => $type->value,
                     'status' => $response->status(),
@@ -64,7 +62,6 @@ class SmartAssistService
             $tokenUsage = $response->json('usageMetadata.totalTokenCount', 0);
 
             Log::info('AI Request: Title="' . $title . '", TokenUsage=' . $tokenUsage . ', Latency=' . $latency . 's', [
-                'request_id' => $requestId,
                 'title' => $title,
                 'type' => $type->value,
                 'token_usage' => $tokenUsage,
@@ -78,7 +75,6 @@ class SmartAssistService
             $latency = round((microtime(true) - $startTime), 2);
             
             Log::error('AI Request Timeout', [
-                'request_id' => $requestId,
                 'title' => $title,
                 'type' => $type->value,
                 'latency' => "{$latency}s",

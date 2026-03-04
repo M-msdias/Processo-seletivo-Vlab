@@ -129,7 +129,6 @@ class SmartAssistController extends Controller
 
             return response()->json([
                 'message' => $message,
-                // 'request_id' => $requestId, // removido
                 'error_type' => class_basename($e)
             ], $statusCode);
         }
