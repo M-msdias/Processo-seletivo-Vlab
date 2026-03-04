@@ -9,6 +9,7 @@ RUN apk add --no-cache \
     icu-dev \
     curl \
     git \
+    nginx \
     && docker-php-ext-configure intl \
     && docker-php-ext-install \
         pdo pdo_mysql pdo_pgsql pgsql \
