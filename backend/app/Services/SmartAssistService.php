@@ -24,6 +24,14 @@ class SmartAssistService
         $startTime = microtime(true);
 
         try {
+
+            Log::info('AI Request Started', [
+                'request_id' => $requestId,
+                'title' => $title,
+                'type' => $type->value,
+                'timestamp' => now()->toIso8601String()
+            ]);
+
             $response = Http::timeout(30)
                 ->post("{$this->apiUrl}?key={$this->apiKey}", [
                     'contents' => [
@@ -41,11 +49,13 @@ class SmartAssistService
             $latency = round((microtime(true) - $startTime), 2);
 
             if ($response->failed()) {
-                Log::error('AI Request failed', [
-                    'title'   => $title,
-                    'type'    => $type->value,
-                    'status'  => $response->status(),
-                    'body'    => $response->body(),
+                Log::error('AI Request Failed', [
+                    'request_id' => $requestId,
+                    'title' => $title,
+                    'type' => $type->value,
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                    'latency' => "{$latency}s"
                 ]);
                 throw new \Exception('Falha ao consultar a API de IA.');
             }
@@ -53,17 +63,28 @@ class SmartAssistService
             $content = $response->json('candidates.0.content.parts.0.text');
             $tokenUsage = $response->json('usageMetadata.totalTokenCount', 0);
 
-            Log::info('AI Request', [
-                'title'       => $title,
-                'type'        => $type->value,
-                'TokenUsage'  => $tokenUsage,
-                'Latency'     => "{$latency}s",
+            Log::info('AI Request: Title="' . $title . '", TokenUsage=' . $tokenUsage . ', Latency=' . $latency . 's', [
+                'request_id' => $requestId,
+                'title' => $title,
+                'type' => $type->value,
+                'token_usage' => $tokenUsage,
+                'latency_seconds' => $latency,
+                'response_preview' => substr($content, 0, 100)
             ]);
 
             return json_decode($content, true);
 
         } catch (ConnectionException $e) {
-            Log::error('AI Connection timeout', ['title' => $title]);
+            $latency = round((microtime(true) - $startTime), 2);
+            
+            Log::error('AI Request Timeout', [
+                'request_id' => $requestId,
+                'title' => $title,
+                'type' => $type->value,
+                'latency' => "{$latency}s",
+                'error' => $e->getMessage()
+            ]);
+
             throw new \Exception('A IA demorou demais para responder. Tente novamente.');
         }
     }
