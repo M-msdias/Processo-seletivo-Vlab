@@ -35,12 +35,10 @@ class SmartAssistController extends Controller
      */
     public function generate(Request $request): JsonResponse
     {
-        $requestId = uniqid('smart_assist_', true);
         $startTime = microtime(true);
 
         try {
             Log::info('Smart Assist Request Started', [
-                'request_id' => $requestId,
                 'data' => $request->only(['title', 'type']),
                 'user_id' => auth()->id() ?? 'guest',
                 'ip' => $request->ip(),
@@ -54,13 +52,11 @@ class SmartAssistController extends Controller
                 ]);
 
                 Log::info('Smart Assist Validation Passed', [
-                    'request_id' => $requestId,
                     'validated_data' => $validated
                 ]);
 
             } catch (ValidationException $e) {
                 Log::warning('Smart Assist Validation Failed', [
-                    'request_id' => $requestId,
                     'errors' => $e->errors(),
                     'data' => $request->all()
                 ]);
@@ -72,7 +68,6 @@ class SmartAssistController extends Controller
             }
 
             Log::info('Calling Smart Assist Service', [
-                'request_id' => $requestId,
                 'title' => $validated['title'],
                 'type' => $validated['type']
             ]);
@@ -85,7 +80,6 @@ class SmartAssistController extends Controller
             $latency = round((microtime(true) - $startTime), 2);
 
             Log::info('Smart Assist Completed Successfully', [
-                'request_id' => $requestId,
                 'title' => $validated['title'],
                 'type' => $validated['type'],
                 'latency' => "{$latency}s",
@@ -103,7 +97,6 @@ class SmartAssistController extends Controller
             $latency = round((microtime(true) - $startTime), 2);
             
             Log::error('Smart Assist Invalid Resource Type', [
-                'request_id' => $requestId,
                 'type' => $request->input('type'),
                 'error' => $e->getMessage(),
                 'latency' => "{$latency}s"
@@ -117,7 +110,6 @@ class SmartAssistController extends Controller
             $latency = round((microtime(true) - $startTime), 2);
             
             Log::error('Smart Assist Failed', [
-                'request_id' => $requestId,
                 'title' => $request->input('title'),
                 'type' => $request->input('type'),
                 'error' => $e->getMessage(),
@@ -137,7 +129,7 @@ class SmartAssistController extends Controller
 
             return response()->json([
                 'message' => $message,
-                'request_id' => $requestId,
+                // 'request_id' => $requestId, // removido
                 'error_type' => class_basename($e)
             ], $statusCode);
         }
