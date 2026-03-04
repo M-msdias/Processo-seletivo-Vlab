@@ -45,6 +45,11 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
+COPY nginx.conf /etc/nginx/http.d/default.conf
+RUN ln -sf /dev/stderr /var/log/nginx/error.log \
+    && ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -s /var/www/html/public /var/www/html
+
 EXPOSE 9000
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
