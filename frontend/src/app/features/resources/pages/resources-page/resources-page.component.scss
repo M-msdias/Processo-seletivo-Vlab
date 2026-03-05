@@ -49,6 +49,8 @@
       max-width: 1100px;
       margin: 0 auto;
       padding: 0 1.5rem 3rem;
+      min-height: calc(100vh - 20rem);
+      position: relative;
     }
 
     .section-header {
@@ -86,6 +88,10 @@
     }
 
     .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+       transform: translate(-50%, -50%);
       text-align: center;
       padding: 3rem;
       color: #aaa;
@@ -140,8 +146,8 @@
 .lds-heart {
   display: inline-block;
   position: relative;
-  width: 80px;
-  height: 80px;
+  width:  120px;
+  height: 120px;
   transform: rotate(45deg);
   transform-origin: 40px 40px;
 }
@@ -195,7 +201,17 @@
 :host ::ng-deep .p-paginator {
   background: transparent;
   border: none;
+  padding-bottom: 3rem;
 }
+
+:host ::ng-deep .p-paginator .p-select-label {
+  color: #333 !important;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-page-selected {
+  background: #f5e6c8 !important;
+}
+
 :host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
   background: #c96b8a;
   color: white;
@@ -204,4 +220,5 @@
 
 :host ::ng-deep .p-paginator .p-select {
   background: transparent;
+
 }

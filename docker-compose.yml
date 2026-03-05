@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hubeduc_backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env           
+      - "8000:80"                
+      - ./backend:/var/www/html    
+      - ./backend/storage:/var/www/html/storage  
+    networks:
+      - hubeduc_net
+  
+
+  # Frontend Angular
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: hubeduc_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "4200:4200"                
+    volumes:
+      - ./frontend:/app            
+      - /app/node_modules           
+    networks:
+      - hubeduc_net
+
+networks:
+  hubeduc_net:
+    driver: bridge
+
+volumes:
+  pgdata:
